@@ -17,14 +17,21 @@ document.addEventListener("keypress", (event) => {
   if (event.keyCode === 32) {
     if (!gameActive) {
       startGame();
+      if ((scoreboard.style.display = "block")) {
+        scoreboard.style.display = "none";
+      }
     }
   }
 });
 
 settingsBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
+    settingsBtns.forEach((btn) => {
+      btn.style.opacity = "0.1";
+    });
     testTime = btn.innerHTML.substring(0, 2);
     timerElement.textContent = testTime + ":00";
+    btn.style.opacity = "1";
   });
 });
 
@@ -38,10 +45,10 @@ function startGame() {
   gameCount++;
   clearInterval(timerInterval);
   fillWords();
-  pressStart.style.opacity = "0.3";
+  pressStart.style.opacity = "0";
   document.querySelector("#timer").style.opacity = "1";
   typeTest.classList.remove("blur");
-  document.getElementById("settings").classList.remove("blur");
+  document.getElementById("settings").style.display = "none";
 }
 
 function fillWords() {
@@ -131,6 +138,7 @@ function updateTimer(startTime) {
       pressStart.innerHTML = "Press space to restart";
       pressStart.style.opacity = "1";
       gameActive = false;
+      scoreboard.style.display = "block";
       return;
     }
     timerElement.textContent = remainingTime.toFixed(2);

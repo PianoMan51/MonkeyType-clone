@@ -34,6 +34,7 @@ body {
 #settings {
   display: flex;
   gap: 20px;
+  margin-top: 30px;
 }
 
 #type_test {
