@@ -1,74 +1,141 @@
-let type_test = document.getElementById("type_test");
+let typeTest = document.getElementById("type_test");
 let timerElement = document.getElementById("timer");
-let game_active = false;
+let settingsBtns = document.querySelectorAll(".time");
+let scoreboard = document.getElementById("scoreboard");
+let pressStart = document.querySelector("#press_start");
+let gameActive = false;
+let gameCount = 0;
 let startTime;
 let timerInterval;
+let correctChar = 0;
+let testTime = 30;
+let currentIndex = 0;
 
 fillWords();
 
 document.addEventListener("keypress", (event) => {
-  if (game_active == false) {
-    if (event.keyCode === 32) {
-      game_active = true;
-      startTime = new Date();
-      checkWords(startTime);
-      document.querySelector("#press_start").style.opacity = "0.3";
-      document.querySelector("#timer").style.opacity = "1";
-      updateTimer();
+  if (event.keyCode === 32) {
+    if (!gameActive) {
+      startGame();
     }
   }
+  restartButton.addEventListener("click", () => {
+    startGame();
+  });
 });
 
+settingsBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    testTime = btn.innerHTML;
+    timerElement.textContent = testTime + ":00";
+  });
+});
+
+document.addEventListener("keydown", checkWords);
+
+function startGame() {
+  gameActive = true;
+  startTime = null;
+  correctChar = 0;
+  currentIndex = 0;
+  gameCount++;
+  clearInterval(timerInterval);
+  fillWords();
+  pressStart.style.opacity = "0.3";
+  document.querySelector("#timer").style.opacity = "1";
+  typeTest.classList.remove("blur");
+  document.getElementById("settings").classList.remove("blur");
+}
+
 function fillWords() {
+  timerElement.textContent = testTime + ":00";
   fetch("/words.json")
     .then((response) => response.json())
     .then((words) => {
-      for (let i = 0; i < 10; i++) {
+      let wordCount = 0;
+      typeTest.innerHTML = "";
+      for (let i = 0; i < 20; i++) {
         let random = Math.floor(Math.random() * 979);
         for (let j = 0; j < words[random].length; j++) {
           let char = document.createElement("span");
           char.innerHTML = words[random][j];
-          type_test.append(char);
+          typeTest.append(char);
+          wordCount++;
         }
         let char = document.createElement("span");
         char.innerHTML = " ";
-        type_test.append(char);
+        typeTest.append(char);
       }
-      type_test.children[0].classList.add("active_char");
+      typeTest.children[0].classList.add("active_char");
     });
 }
 
-function checkWords() {
-  let current_char = 0;
-  type_test.children[0].classList.add("active_char");
-  document.addEventListener("keydown", (event) => {
-    if (event.key === type_test.innerText[current_char]) {
-      type_test.children[current_char + 1].classList.add("active_char");
-      type_test.children[current_char].style.color = "rgba(236, 240, 241, 1)";
-      type_test.children[current_char].classList.remove("active_char");
-      current_char++;
+function checkWords(event) {
+  let currentChar = typeTest.innerText[currentIndex];
+  let nextElement = typeTest.children[currentIndex + 1];
+  let currentElement = typeTest.children[currentIndex];
+  let previousElement = typeTest.children[currentIndex - 1];
+
+  if (gameActive) {
+    if (!startTime && event.key == typeTest.innerText[0]) {
+      startTime = new Date();
+      updateTimer(startTime);
+    }
+    if (nextElement) {
+      nextElement.classList.add("active_char");
+    }
+    if (event.keyCode !== 8) {
+      if (event.key === currentChar) {
+        currentElement.style.color = "var(--white)";
+        correctChar++;
+      } else {
+        currentElement.style.color = "var(--red)";
+      }
+      currentElement.classList.remove("active_char");
+      currentIndex++;
     } else {
-      type_test.children[current_char].style.color = "#e74c3c";
+      if (currentIndex > 0) {
+        currentElement.classList.remove("active_char");
+        nextElement.classList.remove("active_char");
+        previousElement.classList.add("active_char");
+        previousElement.style.color = "var(--opaguewhite)";
+        currentIndex--;
+      }
     }
-    if (current_char == type_test.children.length - 1) {
-      type_test.innerHTML = "";
+    if (nextElement == null) {
+      typeTest.innerHTML = "";
       fillWords();
-      current_char = 0;
+      currentIndex = 0;
     }
-  });
+  }
 }
 
-function updateTimer() {
-  let totalTime = 30;
+function updateTimer(startTime) {
   timerInterval = setInterval(() => {
     let currentTime = new Date();
     let elapsedTime = (currentTime - startTime) / 1000;
-    let remainingTime = totalTime - elapsedTime;
+    let remainingTime = testTime - elapsedTime;
     if (remainingTime <= 0) {
       clearInterval(timerInterval);
-      timerElement.textContent = "0.00";
+      let score = (correctChar / testTime).toFixed(2) * 60 + " chars/m";
+      let game_score = document.createElement("li");
+      game_score.setAttribute("class", "gamescore");
+      typeTest.innerHTML = score;
+      game_score.innerHTML =
+        "#" +
+        gameCount +
+        " " +
+        new Date().getHours() +
+        ":" +
+        new Date().getMinutes() +
+        " - " +
+        score;
+      scoreboard.append(game_score);
+      pressStart.innerHTML = "Press space to restart";
+      pressStart.style.opacity = "1";
+      gameActive = false;
       return;
     }
-    timerElement.textContent = `${remainingTime.toFixed(2)}`;
+    timerElement.textContent = remainingTime.toFixed(2);
   }, 1);
 }
