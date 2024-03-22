@@ -19,14 +19,11 @@ document.addEventListener("keypress", (event) => {
       startGame();
     }
   }
-  restartButton.addEventListener("click", () => {
-    startGame();
-  });
 });
 
 settingsBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
-    testTime = btn.innerHTML;
+    testTime = btn.innerHTML.substring(0, 2);
     timerElement.textContent = testTime + ":00";
   });
 });
@@ -117,10 +114,10 @@ function updateTimer(startTime) {
     let remainingTime = testTime - elapsedTime;
     if (remainingTime <= 0) {
       clearInterval(timerInterval);
-      let score = (correctChar / testTime).toFixed(2) * 60 + " chars/m";
+      let score = ((correctChar / testTime) * 60).toFixed(0);
       let game_score = document.createElement("li");
       game_score.setAttribute("class", "gamescore");
-      typeTest.innerHTML = score;
+      typeTest.innerHTML = score + "chars/m";
       game_score.innerHTML =
         "#" +
         gameCount +
