@@ -58,8 +58,8 @@ function fillWords() {
     .then((words) => {
       let wordCount = 0;
       typeTest.innerHTML = "";
-      for (let i = 0; i < 20; i++) {
-        let random = Math.floor(Math.random() * 979);
+      for (let i = 0; i < 30; i++) {
+        let random = Math.floor(Math.random() * words.length);
         for (let j = 0; j < words[random].length; j++) {
           let char = document.createElement("span");
           char.innerHTML = words[random][j];
