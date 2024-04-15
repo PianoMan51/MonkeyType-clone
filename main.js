@@ -1,25 +1,23 @@
 let typeTest = document.getElementById("type_test");
 let timerElement = document.getElementById("timer");
 let settingsBtns = document.querySelectorAll(".time");
-let scoreboard = document.getElementById("scoreboard");
-let pressStart = document.querySelector("#press_start");
 let gameActive = false;
-let gameCount = 0;
+let scoreboard = JSON.parse(localStorage.getItem("scoreboard")) || [];
+let keyListenerEnabled = true;
 let startTime;
+let wordLength = 5;
 let timerInterval;
-let correctChar = 0;
-let testTime = 30;
-let currentIndex = 0;
+let correctChar;
+let missedChar;
 
-fillWords();
+let testTime = 15;
+let currentIndex;
 
 document.addEventListener("keypress", (event) => {
-  if (event.keyCode === 32) {
+  if (event.keyCode === 32 && keyListenerEnabled) {
     if (!gameActive) {
+      console.log("Start");
       startGame();
-      if ((scoreboard.style.display = "block")) {
-        scoreboard.style.display = "none";
-      }
     }
   }
 });
@@ -29,7 +27,6 @@ settingsBtns.forEach((btn) => {
     settingsBtns.forEach((btn) => {
       btn.style.opacity = "0.1";
     });
-    testTime = btn.innerHTML.substring(0, 2);
     timerElement.textContent = testTime + ":00";
     btn.style.opacity = "1";
   });
@@ -42,13 +39,8 @@ function startGame() {
   startTime = null;
   correctChar = 0;
   currentIndex = 0;
-  gameCount++;
   clearInterval(timerInterval);
   fillWords();
-  pressStart.style.opacity = "0";
-  document.querySelector("#timer").style.opacity = "1";
-  typeTest.classList.remove("blur");
-  document.getElementById("settings").style.display = "none";
 }
 
 function fillWords() {
@@ -85,62 +77,94 @@ function checkWords(event) {
       startTime = new Date();
       updateTimer(startTime);
     }
-    if (nextElement) {
-      nextElement.classList.add("active_char");
-    }
-    if (event.keyCode !== 8) {
-      if (event.key === currentChar) {
-        currentElement.style.color = "var(--white)";
-        correctChar++;
-      } else {
-        currentElement.style.color = "var(--red)";
-      }
-      currentElement.classList.remove("active_char");
-      currentIndex++;
+    if (currentIndex == 0 && currentChar !== event.key) {
+      return;
     } else {
-      if (currentIndex > 0) {
+      if (event.keyCode !== 8) {
+        if (nextElement) {
+          nextElement.classList.add("active_char");
+        }
+
+        if (event.key === currentChar) {
+          currentElement.style.color = "var(--white)";
+          correctChar++;
+        } else {
+          currentElement.style.color = "var(--red)";
+        }
         currentElement.classList.remove("active_char");
-        nextElement.classList.remove("active_char");
-        previousElement.classList.add("active_char");
-        previousElement.style.color = "var(--opaguewhite)";
-        currentIndex--;
+        currentIndex++;
+      } else {
+        if (currentIndex > 0) {
+          currentElement.classList.remove("active_char");
+          nextElement.classList.remove("active_char");
+          previousElement.classList.add("active_char");
+          previousElement.style.color = "var(--opaguewhite)";
+          currentIndex--;
+        }
       }
-    }
-    if (nextElement == null) {
-      typeTest.innerHTML = "";
-      fillWords();
-      currentIndex = 0;
+      if (nextElement == null) {
+        typeTest.innerHTML = "";
+        fillWords();
+        currentIndex = 0;
+      }
     }
   }
 }
 
 function updateTimer(startTime) {
+  let timerInterval;
+
   timerInterval = setInterval(() => {
     let currentTime = new Date();
     let elapsedTime = (currentTime - startTime) / 1000;
     let remainingTime = testTime - elapsedTime;
+
     if (remainingTime <= 0) {
       clearInterval(timerInterval);
-      let score = ((correctChar / testTime) * 60).toFixed(0);
-      let game_score = document.createElement("li");
-      game_score.setAttribute("class", "gamescore");
-      typeTest.innerHTML = score + "chars/m";
-      game_score.innerHTML =
-        "#" +
-        gameCount +
-        " " +
-        new Date().getHours() +
-        ":" +
-        new Date().getMinutes() +
-        " - " +
-        score;
-      scoreboard.append(game_score);
-      pressStart.innerHTML = "Press space to restart";
-      pressStart.style.opacity = "1";
+      let score = ((correctChar / wordLength / testTime) * 60).toFixed(0);
+      typeTest.innerHTML = score + "wpm";
+      let now = new Date();
+
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+
+      let game_score = {
+        time: `${hours}:${minutes}`,
+        score: score,
+        testTime: testTime,
+      };
+
+      scoreboard.push(game_score);
+      localStorage.setItem("scoreboard", JSON.stringify(scoreboard));
+
+      updateScoreboard();
       gameActive = false;
-      scoreboard.style.display = "block";
+
+      keyListenerEnabled = false;
+      console.log("Wait two seconds");
+      setTimeout(() => {
+        keyListenerEnabled = true;
+        console.log("Ready");
+        timerElement.textContent = "Press space for restart";
+      }, 1000);
+
       return;
     }
+
     timerElement.textContent = remainingTime.toFixed(2);
   }, 1);
 }
+
+function updateScoreboard() {
+  let scoreboardUl = document.getElementById("scoreboard");
+  scoreboardUl.innerHTML = ""; // Clear previous scoreboard
+
+  scoreboard.forEach((score) => {
+    const scoreItem = document.createElement("li");
+    scoreItem.classList.add("gamescore");
+    scoreItem.textContent = `${score.time} ${score.score} raw @${score.testTime}s`;
+    scoreboardUl.appendChild(scoreItem);
+  });
+}
+
+updateScoreboard();

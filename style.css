@@ -1,7 +1,7 @@
 :root {
   --red: #e74c3c;
   --background: #2c3e50;
-  --lightbg: #34495e;
+  --lightbackground: #34495e;
   --white: rgba(236, 240, 241, 1);
   --opaguewhite: rgba(236, 240, 241, 0.3);
 }
@@ -11,7 +11,7 @@
 }
 
 body {
-  background-color: var(--background);
+  background-color: var(--lightbackground);
 }
 
 #content {
@@ -24,10 +24,13 @@ body {
 }
 
 #app {
+  background-color: var(--background);
+  padding: 40px 200px;
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 60%;
+  width: 50%;
   gap: 5px;
 }
 
@@ -46,10 +49,6 @@ body {
   letter-spacing: 3px;
   border: none;
   color: var(--opaguewhite);
-}
-
-.blur {
-  filter: blur(3px);
 }
 
 .time {
@@ -84,7 +83,6 @@ body {
 #menu_bar span {
   color: gold;
   font-size: 24px;
-  opacity: 0;
 }
 
 #menu_bar {
@@ -103,17 +101,15 @@ body {
 #scoreboard {
   width: 250px;
   height: 300px;
-  padding: 0;
-  position: absolute;
-  left: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  list-style-type: none;
+  margin-top: 50px;
+  border: 2px solid white;
 }
 
 .gamescore {
-  list-style-type: none;
-  padding: 10px 20px;
-  border: 2px solid var(--opaguewhite);
-  border-radius: 8px;
-  color: var(--opaguewhite);
+  color: var(--white);
   margin: 5px;
 }
 
