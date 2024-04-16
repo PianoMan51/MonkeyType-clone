@@ -1,0 +1,54 @@
+.top_bar {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.top_bar h3 {
+  font-size: 30px;
+  color: white;
+  cursor: default;
+}
+
+#top_bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 50%;
+}
+
+#top_bar i {
+  color: white;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: white;
+  cursor: default;
+}
+
+#level {
+  background-color: var(--opaguewhite);
+  height: 20px;
+  width: 30px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--lightbackground);
+  font-weight: bolder;
+}
+
+#top_bar i:hover {
+  background-color: var(--lightbackground);
+}

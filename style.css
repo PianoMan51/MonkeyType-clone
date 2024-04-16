@@ -11,21 +11,18 @@
 }
 
 body {
-  background-color: var(--lightbackground);
+  background-color: var(--background);
 }
 
 #content {
   height: 900px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 4px;
 }
 
 #app {
-  background-color: var(--background);
-  padding: 40px 200px;
   border-radius: 15px;
   display: flex;
   flex-direction: column;
