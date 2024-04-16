@@ -87,7 +87,7 @@ body {
   width: 100%;
   display: flex;
   flex-direction: row;
-  gap: 200px;
+  position: relative;
 }
 
 .active_char {
@@ -131,6 +131,24 @@ body {
 #restart_button:active {
   transform: scale(1.1);
   transition: 0.2s;
+}
+
+#test_language {
+  border: none;
+  background-color: transparent;
+  color: var(--opaguewhite);
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#test_language i {
+  margin-right: 15px;
+}
+
+#test_language:hover {
+  color: white;
 }
 
 @keyframes cursor {

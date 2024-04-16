@@ -9,7 +9,7 @@ let startTime;
 let wordLength = 5;
 let timerInterval;
 let correctChar;
-let missedChar;
+let incorrectChar;
 
 let testTime;
 let currentIndex;
@@ -43,6 +43,11 @@ settingButtons.forEach((btn) => {
       });
       if (btn.classList[2] !== "active") {
         btn.classList.add("active");
+        let newTime = btn.childNodes[1].getAttribute("value");
+        if (gameActive) {
+          timerElement.innerHTML = newTime;
+        }
+        testTime = newTime;
       } else {
         btn.classList.remove("active");
       }
@@ -54,6 +59,8 @@ function startGame() {
   gameActive = true;
   startTime = null;
   correctChar = 0;
+  incorrectChar = 0;
+  accuracy = 0;
   currentIndex = 0;
   clearInterval(timerInterval);
   document.getElementById("game_result").style.display = "none";
@@ -64,7 +71,7 @@ function fillWords() {
   testTime = document
     .querySelector(".setting_buttons.time.active")
     .childNodes[1].getAttribute("value");
-  timerElement.textContent = testTime + ":00";
+  timerElement.textContent = testTime;
   fetch("/words.json")
     .then((response) => response.json())
     .then((words) => {
@@ -106,12 +113,12 @@ function checkWords(event) {
         if (nextElement) {
           nextElement.classList.add("active_char");
         }
-
         if (event.key === currentChar) {
           currentElement.style.color = "var(--white)";
           correctChar++;
         } else {
           currentElement.style.color = "var(--red)";
+          incorrectChar++;
         }
         currentElement.classList.remove("active_char");
         currentIndex++;
@@ -144,6 +151,7 @@ function updateTimer(startTime) {
     if (remainingTime <= 0) {
       clearInterval(timerInterval);
       let score = ((correctChar / wordLength / testTime) * 60).toFixed(0);
+      let accuracy = (correctChar / (incorrectChar + correctChar)) * 100;
       typeTest.innerHTML = score + "wpm";
       document.getElementById("wpm").innerHTML = score;
       let now = new Date();
@@ -160,7 +168,6 @@ function updateTimer(startTime) {
       scoreboard.push(game_score);
       localStorage.setItem("scoreboard", JSON.stringify(scoreboard));
 
-      //updateScoreboard();
       gameActive = false;
       settings_bar.style.opacity = "1";
 
@@ -168,8 +175,13 @@ function updateTimer(startTime) {
       console.log("Wait two seconds");
       document.getElementById(
         "testType"
-      ).innerHTML = `time ${testTime}<br> english `;
+      ).innerHTML = `time ${testTime}<br> english`;
+      document.getElementById("acc").innerHTML = `${Math.trunc(accuracy)}%`;
       document.getElementById("game_result").style.display = "flex";
+      document.getElementById(
+        "stat_characters"
+      ).innerHTML = `${correctChar}/${incorrectChar}`;
+      document.getElementById("stat_time").innerHTML = `${testTime}s`;
       setTimeout(() => {
         keyListenerEnabled = true;
         console.log("Ready");
@@ -182,16 +194,3 @@ function updateTimer(startTime) {
     timerElement.textContent = remainingTime.toFixed(2);
   }, 1);
 }
-
-/* function updateScoreboard() {
-  let scoreboardUl = document.getElementById("scoreboard");
-
-  scoreboard.forEach((score) => {
-    const scoreItem = document.createElement("li");
-    scoreItem.classList.add("gamescore");
-    scoreItem.textContent = `${score.time} ${score.score} raw @${score.testTime}s`;
-    scoreboardUl.appendChild(scoreItem);
-  });
-} */
-
-//updateScoreboard();

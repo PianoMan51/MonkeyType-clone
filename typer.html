@@ -73,6 +73,10 @@
 
                 <div class="spacer"></div>
 
+                <button class="setting_buttons time">
+                    <span class="testTime" value="5">5</span>
+                </button>
+
                 <button class="setting_buttons time active">
                     <span class="testTime" value="15">15</span>
                 </button>
@@ -85,28 +89,26 @@
                     <span class="testTime" value="60">60</span>
                 </button>
 
-                <button class="setting_buttons time">
-                    <span class="testTime" value="5">5</span>
-                </button>
+
             </div>
             <div id="game">
                 <div id="menu_bar">
                     <span id="timer">Press space to start</span>
+                    <button id="test_language"><i class="fa-solid fa-earth-americas fa-xl"></i>english</button>
                 </div>
 
                 <div id="type_test">
                 </div>
             </div>
-
             <div id="game_result">
                 <div class="game_result_section">
                     <div class="result_stat">
                         <h4>wpm</h4>
-                        <span id="wpm">110</span>
+                        <span id="wpm"></span>
                     </div>
                     <div class="result_stat">
                         <h4>acc</h4>
-                        <span id="acc">98%</span>
+                        <span id="acc"></span>
                     </div>
                     <div class="result_stat" id="result_stat_testType">
                         <h4>test type</h4>
@@ -114,6 +116,21 @@
                     </div>
                 </div>
                 <div class="game_result_section">
+                    <div id="graph"></div>
+                    <div id="lower_results">
+                        <div class="lower_stat">
+                            <h4>raw</h4>
+                            <span id="stat_raw">79</span>
+                        </div>
+                        <div class="lower_stat">
+                            <h4>characters</h4>
+                            <span id="stat_characters"></span>
+                        </div>
+                        <div class="lower_stat">
+                            <h4>time</h4>
+                            <span id="stat_time"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

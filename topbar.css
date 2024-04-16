@@ -31,6 +31,10 @@
   transform: scale(1);
 }
 
+#top_bar a {
+  text-decoration: none;
+}
+
 #top_bar i:hover {
   background-color: var(--background);
   transition: ease-in-out 0.2s;
