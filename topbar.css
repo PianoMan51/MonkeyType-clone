@@ -8,6 +8,7 @@
   font-size: 30px;
   color: white;
   cursor: default;
+  margin: 20;
 }
 
 #top_bar {
@@ -18,7 +19,7 @@
 }
 
 #top_bar i {
-  color: white;
+  color: var(--opaguewhite);
   height: 30px;
   width: 30px;
   display: flex;
@@ -26,6 +27,15 @@
   justify-content: center;
   border-radius: 50%;
   cursor: pointer;
+  transition: ease-in-out 0.2s;
+  transform: scale(1);
+}
+
+#top_bar i:hover {
+  background-color: var(--background);
+  transition: ease-in-out 0.2s;
+  transform: scale(1.05);
+  color: white;
 }
 
 #account {
@@ -33,7 +43,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  color: white;
+  color: var(--opaguewhite);
   cursor: default;
 }
 
@@ -47,8 +57,4 @@
   justify-content: center;
   color: var(--lightbackground);
   font-weight: bolder;
-}
-
-#top_bar i:hover {
-  background-color: var(--lightbackground);
 }

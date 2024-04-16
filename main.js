@@ -1,8 +1,9 @@
 let typeTest = document.getElementById("type_test");
 let timerElement = document.getElementById("timer");
-let settingsBtns = document.querySelectorAll(".time");
 let gameActive = false;
+let settings_bar = document.getElementById("settings");
 let scoreboard = JSON.parse(localStorage.getItem("scoreboard")) || [];
+let settingButtons = document.querySelectorAll(".setting_buttons");
 let keyListenerEnabled = true;
 let startTime;
 let wordLength = 5;
@@ -10,7 +11,7 @@ let timerInterval;
 let correctChar;
 let missedChar;
 
-let testTime = 15;
+let testTime;
 let currentIndex;
 
 document.addEventListener("keypress", (event) => {
@@ -22,17 +23,32 @@ document.addEventListener("keypress", (event) => {
   }
 });
 
-settingsBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    settingsBtns.forEach((btn) => {
-      btn.style.opacity = "0.1";
-    });
-    timerElement.textContent = testTime + ":00";
-    btn.style.opacity = "1";
+document.addEventListener("keydown", checkWords);
+
+settingButtons.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    if (btn.classList[1] == "type") {
+      document.querySelectorAll(".type").forEach((b) => {
+        b.classList.remove("active");
+      });
+      if (btn.classList[2] !== "active") {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    }
+    if (btn.classList[1] == "time") {
+      document.querySelectorAll(".time").forEach((b) => {
+        b.classList.remove("active");
+      });
+      if (btn.classList[2] !== "active") {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    }
   });
 });
-
-document.addEventListener("keydown", checkWords);
 
 function startGame() {
   gameActive = true;
@@ -40,10 +56,14 @@ function startGame() {
   correctChar = 0;
   currentIndex = 0;
   clearInterval(timerInterval);
+  document.getElementById("game_result").style.display = "none";
   fillWords();
 }
 
 function fillWords() {
+  testTime = document
+    .querySelector(".setting_buttons.time.active")
+    .childNodes[1].getAttribute("value");
   timerElement.textContent = testTime + ":00";
   fetch("/words.json")
     .then((response) => response.json())
@@ -73,6 +93,8 @@ function checkWords(event) {
   let previousElement = typeTest.children[currentIndex - 1];
 
   if (gameActive) {
+    settings_bar.style.opacity = "0";
+
     if (!startTime && event.key == typeTest.innerText[0]) {
       startTime = new Date();
       updateTimer(startTime);
@@ -123,6 +145,7 @@ function updateTimer(startTime) {
       clearInterval(timerInterval);
       let score = ((correctChar / wordLength / testTime) * 60).toFixed(0);
       typeTest.innerHTML = score + "wpm";
+      document.getElementById("wpm").innerHTML = score;
       let now = new Date();
 
       let hours = now.getHours();
@@ -137,11 +160,16 @@ function updateTimer(startTime) {
       scoreboard.push(game_score);
       localStorage.setItem("scoreboard", JSON.stringify(scoreboard));
 
-      updateScoreboard();
+      //updateScoreboard();
       gameActive = false;
+      settings_bar.style.opacity = "1";
 
       keyListenerEnabled = false;
       console.log("Wait two seconds");
+      document.getElementById(
+        "testType"
+      ).innerHTML = `time ${testTime}<br> english `;
+      document.getElementById("game_result").style.display = "flex";
       setTimeout(() => {
         keyListenerEnabled = true;
         console.log("Ready");
@@ -155,9 +183,8 @@ function updateTimer(startTime) {
   }, 1);
 }
 
-function updateScoreboard() {
+/* function updateScoreboard() {
   let scoreboardUl = document.getElementById("scoreboard");
-  scoreboardUl.innerHTML = ""; // Clear previous scoreboard
 
   scoreboard.forEach((score) => {
     const scoreItem = document.createElement("li");
@@ -165,6 +192,6 @@ function updateScoreboard() {
     scoreItem.textContent = `${score.time} ${score.score} raw @${score.testTime}s`;
     scoreboardUl.appendChild(scoreItem);
   });
-}
+} */
 
-updateScoreboard();
+//updateScoreboard();

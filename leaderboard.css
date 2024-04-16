@@ -1,0 +1,10 @@
+#leaderboard {
+  display: flex;
+  height: 70%;
+  width: 70%;
+  min-width: 1000px;
+  background-color: var(--background);
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin: 20px;
+}

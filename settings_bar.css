@@ -1,0 +1,40 @@
+#settings {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  gap: 20px;
+  background-color: var(--background);
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin: 20px;
+  width: 70%;
+  min-width: 1000px;
+}
+
+.setting_buttons {
+  display: flex;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  gap: 10px;
+  color: var(--opaguewhite);
+  cursor: pointer;
+}
+
+.setting_buttons.active {
+  color: gold;
+}
+
+.setting_buttons:hover {
+  color: white;
+}
+.setting_buttons:active {
+  color: var(--lightbackground);
+}
+
+.spacer {
+  height: 70%;
+  width: 4px;
+  background-color: var(--opaguewhite);
+  border-radius: 2px;
+}

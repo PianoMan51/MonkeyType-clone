@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MonkeyTyper</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="topbar.css" />
+    <link rel="stylesheet" href="settings_bar.css" />
+    <link rel="stylesheet" href="game_result.css" />
+    <script src="https://kit.fontawesome.com/d66dd0368f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="content">
+        <div id="top_bar">
+            <div class="top_bar left">
+                <h3>MonkeyType</h3>
+                <a href="/typer.html"><i class="fa-solid fa-keyboard"></i></a>
+                <a href="/leaderboard.html"><i class="fa-solid fa-crown"></i></a>
+                <a href="/about.html"><i class="fa-solid fa-info"></i></a>
+                <a href="/settings.html"><i class="fa-solid fa-gear"></i></a>
+            </div>
+            <div class="top_bar right">
+                <div id="account">
+                    <i class="fa-solid fa-user"></i>
+                    <span>pianoman51</span>
+                    <div id="level">69</div>
+                </div>
+                <i class="fa-solid fa-bell"></i>
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+        </div>
+        <div id="app">
+            <div id="settings">
+                <button class="setting_buttons">
+                    <i class="fa-solid fa-at"></i>
+                    <span>punctuation</span>
+                </button>
+
+                <button class="setting_buttons">
+                    <i class="fa-solid fa-hashtag"></i>
+                    <span>numbers</span>
+                </button>
+
+                <div class="spacer"></div>
+
+                <button class="setting_buttons type active">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>time</span>
+                </button>
+
+                <button class="setting_buttons type">
+                    <i class="fa-solid fa-font"></i>
+                    <span>words</span>
+                </button>
+
+                <button class="setting_buttons type">
+                    <i class="fa-solid fa-quote-left"></i>
+                    <span>quote</span>
+                </button>
+
+                <button class="setting_buttons type">
+                    <i class="fa-solid fa-mountain"></i>
+                    <span>zen</span>
+                </button>
+
+                <button class="setting_buttons type">
+                    <i class="fa-solid fa-wrench"></i>
+                    <span>custom</span>
+                </button>
+
+                <div class="spacer"></div>
+
+                <button class="setting_buttons time active">
+                    <span class="testTime" value="15">15</span>
+                </button>
+
+                <button class="setting_buttons time">
+                    <span class="testTime" value="30">30</span>
+                </button>
+
+                <button class="setting_buttons time">
+                    <span class="testTime" value="60">60</span>
+                </button>
+
+                <button class="setting_buttons time">
+                    <span class="testTime" value="5">5</span>
+                </button>
+            </div>
+            <div id="game">
+                <div id="menu_bar">
+                    <span id="timer">Press space to start</span>
+                </div>
+
+                <div id="type_test">
+                </div>
+            </div>
+
+            <div id="game_result">
+                <div class="game_result_section">
+                    <div class="result_stat">
+                        <h4>wpm</h4>
+                        <span id="wpm">110</span>
+                    </div>
+                    <div class="result_stat">
+                        <h4>acc</h4>
+                        <span id="acc">98%</span>
+                    </div>
+                    <div class="result_stat" id="result_stat_testType">
+                        <h4>test type</h4>
+                        <span id="testType">time 15 <br> english</span>
+                    </div>
+                </div>
+                <div class="game_result_section">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="main.js"></script>
+
+</html>
