@@ -11,7 +11,6 @@ let timerInterval;
 let correctChar;
 let incorrectChar;
 let currentCategory = "time";
-
 let testTime;
 let currentIndex;
 
@@ -250,6 +249,9 @@ function gameDone() {
   let statTimeElement = document.getElementById("stat_time");
   let gameResultElement = document.getElementById("game_result");
   let wpm;
+  let accuracy = ((correctChar / (incorrectChar + correctChar)) * 100).toFixed(
+    0
+  );
 
   if (currentCategory == "time") {
     wpm = ((correctChar / wordLength / testTime) * 60).toFixed(0);
@@ -258,9 +260,26 @@ function gameDone() {
     wpm = ((testTime / timerElement.textContent) * 60).toFixed(0);
   }
 
-  let accuracy = ((correctChar / (incorrectChar + correctChar)) * 100).toFixed(
-    0
-  );
+  let score = {
+    wpm: wpm,
+    category: currentCategory,
+    language: language_button.innerText,
+    time: testTime,
+    correctChar: correctChar,
+    incorrectChar: incorrectChar,
+    accuracy: accuracy,
+  };
+
+  /*   fs.writeFile("/data/results.json", data, (error) => {
+    try {
+      console.log(data);
+      data.push(JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+    }
+  }); */
+
+  createScoreElement(score);
 
   typeTest.innerHTML = `${wpm}wpm`;
   wpmElement.innerHTML = wpm;
@@ -275,4 +294,13 @@ function gameDone() {
   settings_bar.style.opacity = "1";
   language_button.style.opacity = "1";
   gameResultElement.style.display = "flex";
+}
+
+function createScoreElement(score) {
+  let all_results = document.getElementById("all_results");
+  let list_score = document.createElement("li");
+
+  list_score.innerText = `${score.category},${score.language},${score.time},${score.wpm},${score.accuracy},${score.correctChar},${score.incorrectChar}`;
+
+  all_results.append(list_score);
 }
