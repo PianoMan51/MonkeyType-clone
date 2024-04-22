@@ -102,7 +102,7 @@ function startGame() {
 }
 
 function fillWords() {
-  let words = `/${language_button.innerText}.json`;
+  let words = `/data/${language_button.innerText}.json`;
   testTime = document.querySelector(".setting_buttons.time.active")
     .childNodes[1].innerHTML;
   timerElement.textContent = testTime;
