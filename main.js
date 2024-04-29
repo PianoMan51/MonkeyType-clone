@@ -101,11 +101,10 @@ function startGame() {
 }
 
 function fillWords() {
-  let words = `/data/${language_button.innerText}.json`;
   testTime = document.querySelector(".setting_buttons.time.active")
     .childNodes[1].innerHTML;
   timerElement.textContent = testTime;
-  fetch(words)
+  fetch(`/data?category=${language_button.innerText}`)
     .then((response) => response.json())
     .then((words) => {
       typeTest.innerHTML = "";
@@ -270,16 +269,23 @@ function gameDone() {
     accuracy: accuracy,
   };
 
-  /*   fs.writeFile("/data/results.json", data, (error) => {
-    try {
-      console.log(data);
-      data.push(JSON.stringify(data));
-    } catch (error) {
-      console.log(error);
-    }
-  }); */
+  fetch("/postScore", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(score),
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("Score posted successfully");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 
-  createScoreElement(score);
+  createScoreElement();
 
   typeTest.innerHTML = `${wpm}wpm`;
   wpmElement.innerHTML = wpm;
@@ -296,11 +302,16 @@ function gameDone() {
   gameResultElement.style.display = "flex";
 }
 
-function createScoreElement(score) {
+function createScoreElement() {
   let all_results = document.getElementById("all_results");
-  let list_score = document.createElement("li");
 
-  list_score.innerText = `${score.category},${score.language},${score.time},${score.wpm},${score.accuracy},${score.correctChar},${score.incorrectChar}`;
-
-  all_results.append(list_score);
+  fetch("getScores")
+    .then((response) => response.json())
+    .then((data) => {
+      data.forEach((score) => {
+        let list_score = document.createElement("li");
+        list_score.innerHTML = `${score.wpm}, ${score.category},${score.language},${score.time},${score.accuracy}`;
+        all_results.append(list_score);
+      });
+    });
 }

@@ -49,6 +49,11 @@
   height: 80%;
   background-color: var(--opaguewhite);
   border-radius: 15px;
+  overflow-y: scroll;
+}
+
+#graph::-webkit-scrollbar {
+  display: none;
 }
 
 #all_results {
